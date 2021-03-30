@@ -1,0 +1,18 @@
+.containerInput {
+  margin: 20px 40px;
+  /* width: 550px; */
+  /* left: 100px;
+  right: -30px; */
+}
+
+.input {
+  /* width: inherit; */
+  /* position: absolute; */
+  /* right: 100px; */
+}
+
+.img {
+  width: 15px;
+  height: 15px;
+  fill: #9a70c9;
+}
