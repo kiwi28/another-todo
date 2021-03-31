@@ -1,0 +1,29 @@
+.listItemEnabled {
+  border: 1px solid blue;
+  padding: 5px 20px;
+  margin: 5px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+  flex-grow: 8;
+}
+
+.listItemDisabled {
+  border: 1px solid lightgray;
+  padding: 5px 20px;
+  margin: 5px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+  background-color: lightgray;
+  color: hsl(0, 0%, 40%);
+  flex-grow: 2;
+}
+
+.listItemEnabled:nth-child(even) {
+  border: 1px solid red;
+}
+
+.containerLine {
+  display: flex;
+}

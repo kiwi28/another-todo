@@ -1,0 +1,20 @@
+.actionButton {
+  margin: 5px 5px;
+}
+
+.actionIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.actionIcon:hover {
+  border-radius: 10px;
+}
+
+.delete:hover {
+  background-color: red;
+}
+
+.edit:hover {
+  background-color: lightgreen;
+}

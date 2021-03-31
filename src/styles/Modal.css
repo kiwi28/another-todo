@@ -1,0 +1,42 @@
+.modalWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(100, 100, 100, 0.5);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background-color: white;
+  border-radius: 10px;
+}
+
+.button {
+  color: white;
+  font-size: 20px;
+  margin: 0 10px;
+  border-radius: 5px;
+  border: none;
+  padding: 7px;
+}
+
+.button:hover {
+  background-color: lightskyblue;
+}
+
+.red {
+  background-color: red;
+}
+
+.green {
+  background-color: green;
+}
+
+.modalContent {
+  padding: 30px;
+}
