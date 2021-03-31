@@ -48,16 +48,17 @@ export const ListItem = ({
           </div>
           {status && (
             <>
-              <Buton onClick={toggleEdit}>
-                <EditIcon className="actionIcon edit" />
+              <Buton onClick={toggleEdit} className="actionButton edit">
+                <EditIcon className="actionIcon" />
               </Buton>
 
               <Buton
                 onClick={() => {
                   handleClickDelete();
                 }}
+                className="actionButton delete"
               >
-                <DeleteIcon className="actionIcon delete" />
+                <DeleteIcon className="actionIcon" />
               </Buton>
             </>
           )}

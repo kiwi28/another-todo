@@ -1,8 +1,8 @@
 import "../styles/Buton.css";
 
-export const Buton = ({ onClick, children }) => {
+export const Buton = ({ onClick, children, className }) => {
   return (
-    <button className="actionButton" onClick={onClick}>
+    <button className={className} onClick={onClick}>
       {children}
     </button>
   );

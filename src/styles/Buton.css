@@ -1,5 +1,8 @@
 .actionButton {
   margin: 5px 5px;
+  border: 1px solid black;
+  border-radius: 6px;
+  background-color: white;
 }
 
 .actionIcon {
@@ -7,12 +10,13 @@
   height: 30px;
 }
 
-.actionIcon:hover {
-  border-radius: 10px;
+.delete,
+.edit {
+  transition: all 0.5s;
 }
 
 .delete:hover {
-  background-color: red;
+  background-color: #ce1919;
 }
 
 .edit:hover {

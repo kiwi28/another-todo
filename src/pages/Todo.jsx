@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { NewInput } from "../components/Input";
 import { ListItem } from "../components/ListItem";
@@ -6,10 +6,19 @@ import { ListItem } from "../components/ListItem";
 import "../styles/Todo.css";
 
 const generateId = () => Math.random().toString().slice(2);
+const initialState = [];
+const STORAGE_KEY = "localList";
 
 export const Todo = () => {
   const [todo, setTodo] = useState("");
-  const [listItems, setListItems] = useState([]);
+  const [listItems, setListItems] = useState(() => {
+    const localState = localStorage.getItem(STORAGE_KEY);
+    if (localState) {
+      return JSON.parse(localState);
+    }
+
+    return initialState;
+  });
 
   const handleAddItem = () => {
     setListItems([
@@ -24,7 +33,6 @@ export const Todo = () => {
       ...listItems.slice(0, idx),
       {
         ...listItems[idx],
-        value: listItems[idx].value,
         enabled: !listItems[idx].enabled,
       },
       ...listItems.slice(idx + 1, listItems.length),
@@ -45,6 +53,10 @@ export const Todo = () => {
       ...listItems.slice(idx + 1, listItems.length),
     ]);
   };
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(listItems));
+  });
 
   return (
     <div className="todo">
