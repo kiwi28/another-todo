@@ -11,6 +11,7 @@ const STORAGE_KEY = "localList";
 
 export const Todo = () => {
   const [todo, setTodo] = useState("");
+  const [errorState, setErrorState] = useState(false);
   const [listItems, setListItems] = useState(() => {
     const localState = localStorage.getItem(STORAGE_KEY);
     if (localState) {
@@ -21,6 +22,7 @@ export const Todo = () => {
   });
 
   const handleAddItem = () => {
+    if (!todo) return;
     setListItems([
       { id: generateId(), value: todo, enabled: true },
       ...listItems,
@@ -47,6 +49,13 @@ export const Todo = () => {
   };
 
   const handleEdit = (idx, newText) => {
+    if (!newText) {
+      setErrorState("List item cannot be empty");
+      setTimeout(() => {
+        setErrorState(false);
+      }, 3000);
+      return;
+    }
     setListItems([
       ...listItems.slice(0, idx),
       { ...listItems[idx], value: newText, enabled: listItems[idx].enabled },
@@ -68,18 +77,19 @@ export const Todo = () => {
           {listItems.map((item, idx) => {
             return (
               <ListItem
-                key={item.id}
                 idx={idx}
+                item={item}
+                key={item.id}
                 className={
                   listItems[idx].enabled
                     ? "listItemEnabled"
                     : "listItemDisabled"
                 }
-                item={item}
                 onItemChange={handleEdit}
                 status={listItems[idx].enabled}
                 handleDelete={handleDelete(idx)}
                 handleDisabled={handleDisabled(idx)}
+                throwError={errorState}
               />
             );
           })}

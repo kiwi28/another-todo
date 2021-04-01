@@ -1,0 +1,19 @@
+.pageButton {
+  background-color: white;
+  padding: 20px;
+  border: none;
+}
+
+.pageButton:active {
+  border-color: none;
+  background-color: hsl(0, 0%, 95%);
+  border: 1px solid red;
+  outline: none;
+}
+
+.pageButton:focus {
+  border-color: none;
+  background-color: hsl(0, 0%, 95%);
+  border: 1px solid red;
+  outline: none;
+}

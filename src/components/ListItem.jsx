@@ -13,8 +13,9 @@ export const ListItem = ({
   item,
   status,
   className,
-  onItemChange,
+  throwError,
   handleDelete,
+  onItemChange,
   handleDisabled,
 }) => {
   const [editedTodo, setEditedTodo] = useState("");
@@ -43,6 +44,9 @@ export const ListItem = ({
         />
       ) : (
         <>
+          {throwError && (
+            <span className="label">List item cannot be empty!</span>
+          )}
           <div onClick={handleDisabled} className={className}>
             {item.value}
           </div>

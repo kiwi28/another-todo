@@ -14,6 +14,11 @@ export const NewInput = ({
         className="input"
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
+            onAdd();
+          }
+        }}
       />
       <AddIcon className="img" onClick={onAdd} />
     </div>

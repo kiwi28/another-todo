@@ -20,10 +20,19 @@
   flex-grow: 2;
 }
 
-.listItemEnabled:nth-child(even) {
-  border: 1px solid red;
-}
-
 .containerLine {
   display: flex;
+  position: relative;
+}
+
+.label {
+  position: absolute;
+  color: red;
+  background-color: white;
+  top: -3px;
+  font-size: 12px;
+  left: 10px;
+  padding: 1px 3px;
+  border: 1px solid blue;
+  border-radius: 5px;
 }
