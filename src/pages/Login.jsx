@@ -6,6 +6,11 @@ import { RegisterForm } from "../components/RegisterForm";
 import "../styles/Login.css";
 export const Login = () => {
   const [page, setPage] = useState("login");
+  const [formDataState, setFormDataState] = useState({});
+
+  const createFormData = (formData) => () => {
+    setFormDataState(formData);
+  };
 
   const switchPage = (page) => () => {
     setPage(page);
@@ -18,7 +23,11 @@ export const Login = () => {
           switchLogin={switchPage("login")}
           switchRegister={switchPage("register")}
         />
-        {page === "login" ? <LoginForm /> : <RegisterForm />}
+        {page === "login" ? (
+          <LoginForm onClick={createFormData} />
+        ) : (
+          <RegisterForm onClick={createFormData} />
+        )}
       </div>
     </div>
   );
