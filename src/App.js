@@ -1,11 +1,11 @@
 import "./styles/App.css";
 import { Todo } from "./pages/Todo";
-import { Login } from "./pages/Login";
+import { UserAccount } from "./pages/UserAccount";
 
 function App() {
   return (
     <div className="App">
-      <Login />
+      <UserAccount />
     </div>
   );
 }

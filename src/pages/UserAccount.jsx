@@ -4,7 +4,7 @@ import { SwitchForm } from "../components/SwitchForm";
 import { RegisterForm } from "../components/RegisterForm";
 
 import "../styles/Login.css";
-export const Login = () => {
+export const UserAccount = () => {
   const [page, setPage] = useState("login");
   const [formDataState, setFormDataState] = useState({});
 
@@ -24,9 +24,9 @@ export const Login = () => {
           switchRegister={switchPage("register")}
         />
         {page === "login" ? (
-          <LoginForm onClick={createFormData} />
+          <LoginForm createFormData={createFormData} />
         ) : (
-          <RegisterForm onClick={createFormData} />
+          <RegisterForm createFormData={createFormData} />
         )}
       </div>
     </div>

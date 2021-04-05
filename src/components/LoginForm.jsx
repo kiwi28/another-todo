@@ -1,24 +1,32 @@
 import { useState } from "react";
+import { useLogin } from "../hooks/useLogin";
 
 export const LoginForm = ({ createFormDate }) => {
-  const [inputController, setInputController] = useState({
-    email: "",
-    password: "",
-  });
+  const { inputController, handleOnChange, handleOnSubmit } = useLogin();
 
   return (
-    <div className="formContainer">
-      <form>
-        <label>
-          E-mail
-          <input name="email" type="email" placeholder="example@example.com" />
-        </label>
-        <label>
-          Password
-          <input name="pass" type="pass" placeholder="********" />
-        </label>
-        <input name="submit" type="submit" value={"LOG IN"} />
-      </form>
-    </div>
+    <form className="formContainer" onSubmit={handleOnSubmit}>
+      <label>
+        E-mail
+        <input
+          name="email"
+          value={inputController.email}
+          type="email"
+          placeholder="example@example.com"
+          onChange={handleOnChange("email")}
+        />
+      </label>
+      <label>
+        Password
+        <input
+          name="pass"
+          value={inputController.password}
+          onChange={handleOnChange("password")}
+          type="password"
+          placeholder="********"
+        />
+      </label>
+      <input name="submit" type="submit" value={"LOG IN"} />
+    </form>
   );
 };
