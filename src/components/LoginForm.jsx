@@ -1,8 +1,12 @@
-import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 
-export const LoginForm = ({ createFormDate }) => {
-  const { inputController, handleOnChange, handleOnSubmit } = useLogin();
+export const LoginForm = () => {
+  const {
+    inputController,
+    handleOnChange,
+    handleOnSubmit,
+    loading,
+  } = useLogin();
 
   return (
     <form className="formContainer" onSubmit={handleOnSubmit}>
@@ -27,6 +31,7 @@ export const LoginForm = ({ createFormDate }) => {
         />
       </label>
       <input name="submit" type="submit" value={"LOG IN"} />
+      {loading ? <h3>Loading . . .</h3> : null}
     </form>
   );
 };
