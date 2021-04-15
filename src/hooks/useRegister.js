@@ -1,6 +1,7 @@
 import { useState } from "react";
+import url from "../variables.json";
 
-export const useRegister = () => {
+export const useRegister = (setPage) => {
   const [inputController, setInputController] = useState({
     email: "",
     lastName: "",
@@ -8,6 +9,8 @@ export const useRegister = () => {
     password: "",
     cPassword: "",
   });
+
+  const [errorMessage, setErrorMessage] = useState();
 
   const handleOnChange = (field) => (event) => {
     setInputController({
@@ -20,7 +23,7 @@ export const useRegister = () => {
     e.preventDefault();
     if (inputController.password !== inputController.cPassword) return;
 
-    await fetch("http://kiwinet.go.ro:6969/register", {
+    await fetch(url.local + "register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,8 +32,12 @@ export const useRegister = () => {
     })
       .then((data) => data.json())
       .then((res) => {
-        console.log(res);
+        if (res.error) {
+          setErrorMessage(res.error);
+          return;
+        }
         localStorage.setItem("userData", JSON.stringify(res));
+        setPage("login");
       })
       .catch((err) => console.log(err));
   };
@@ -39,5 +46,6 @@ export const useRegister = () => {
     inputController,
     handleOnChange,
     handleOnSubmit,
+    errorMessage,
   };
 };

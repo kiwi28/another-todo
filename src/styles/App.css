@@ -1,0 +1,11 @@
+.errorSpan {
+  color: red;
+  font-size: 13px;
+  display: block;
+  margin: 5px 0;
+}
+
+.logoutBtn {
+  background-color: black;
+  color: white;
+}

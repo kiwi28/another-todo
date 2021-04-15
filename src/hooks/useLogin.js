@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
+import url from "../variables.json";
+
+const TOKEN_KEY = "token";
+const USER_DATA_KEY = "userData";
+
 export function useLogin() {
   const [inputController, setInputController] = useState({
     email: "george.popa@gmail.com",
     password: "kiwi123",
   });
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState();
 
   const history = useHistory();
 
@@ -18,8 +24,7 @@ export function useLogin() {
     event.preventDefault();
     setLoading(true);
 
-    fetch("http://kiwinet.go.ro:6969/auth", {
-      // fetch("http://localhost:4001/auth", {
+    fetch(url.local + "auth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +33,13 @@ export function useLogin() {
     })
       .then((data) => data.json())
       .then((res) => {
-        localStorage.setItem("token", res.accessToken);
+        if (res.error) {
+          setErrorMessage(res.error);
+          setLoading(false);
+          return;
+        }
+        localStorage.setItem(TOKEN_KEY, res.accessToken);
+        localStorage.setItem(USER_DATA_KEY, JSON.stringify(res.userData));
         setLoading(false);
         history.push("/todo");
       })
@@ -40,5 +51,6 @@ export function useLogin() {
     handleOnChange,
     handleOnSubmit,
     loading,
+    errorMessage,
   };
 }

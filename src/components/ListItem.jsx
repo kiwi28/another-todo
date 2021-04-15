@@ -9,6 +9,7 @@ import { ReactComponent as DeleteIcon } from "../images/delete.svg";
 import "../styles/ListItem.css";
 
 export const ListItem = ({
+  id,
   idx,
   item,
   status,
@@ -24,7 +25,7 @@ export const ListItem = ({
 
   const toggleEdit = () => {
     setIsInEdit((s) => !s);
-    setEditedTodo(item.value);
+    setEditedTodo(item.text);
   };
 
   const handleClickDelete = () => {
@@ -38,7 +39,7 @@ export const ListItem = ({
           value={editedTodo}
           onChange={setEditedTodo}
           onAdd={() => {
-            onItemChange(idx, editedTodo);
+            onItemChange(editedTodo);
             setIsInEdit(false);
           }}
         />
@@ -48,7 +49,7 @@ export const ListItem = ({
             <span className="label">List item cannot be empty!</span>
           )}
           <div onClick={handleDisabled} className={className}>
-            {item.value}
+            {item.text}
           </div>
           {status && (
             <>

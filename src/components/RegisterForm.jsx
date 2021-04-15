@@ -1,7 +1,12 @@
 import { useRegister } from "../hooks/useRegister";
 
-export const RegisterForm = () => {
-  const { inputController, handleOnChange, handleOnSubmit } = useRegister();
+export const RegisterForm = ({ setPage }) => {
+  const {
+    inputController,
+    handleOnChange,
+    handleOnSubmit,
+    errorMessage,
+  } = useRegister(setPage);
 
   const isValid = inputController.cPassword === inputController.password;
   return (
@@ -51,11 +56,8 @@ export const RegisterForm = () => {
           value={inputController.cPassword}
           type="password"
         />
-        {!isValid && (
-          <span style={{ color: "red", fontSize: "13px" }}>
-            Passwords do not match
-          </span>
-        )}
+        {errorMessage && <span className="errorSpan">{errorMessage}</span>}
+        {!isValid && <span className="errorSpan">Passwords do not match</span>}
       </label>
       <input name="submit" type="submit" value={"REGISTER"} />
     </form>

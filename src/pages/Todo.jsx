@@ -1,54 +1,135 @@
 import { useEffect, useState } from "react";
-
+import { useHistory } from "react-router-dom";
 import { NewInput } from "../components/Input";
 import { ListItem } from "../components/ListItem";
 
+import url from "../variables.json";
+
 import "../styles/Todo.css";
 
-const generateId = () => Math.random().toString().slice(2);
-const initialState = [];
-const STORAGE_KEY = "localList";
+const TOKEN_KEY = "token";
 
 export const Todo = () => {
   const [todo, setTodo] = useState("");
   const [errorState, setErrorState] = useState(false);
-  const [listItems, setListItems] = useState(() => {
-    const localState = localStorage.getItem(STORAGE_KEY);
-    if (localState) {
-      return JSON.parse(localState);
-    }
 
-    return initialState;
-  });
+  const [listItems, setListItems] = useState([]);
 
-  const handleAddItem = () => {
-    if (!todo) return;
-    setListItems([
-      { id: generateId(), value: todo, enabled: true },
-      ...listItems,
-    ]);
-    setTodo("");
-  };
+  const history = useHistory();
+  const token = localStorage.getItem(TOKEN_KEY);
 
-  const handleDisabled = (idx) => () => {
-    setListItems([
-      ...listItems.slice(0, idx),
-      {
-        ...listItems[idx],
-        enabled: !listItems[idx].enabled,
+  const getListings = () => {
+    fetch(url.local + "getUserItems", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
-      ...listItems.slice(idx + 1, listItems.length),
-    ]);
+    })
+      .then((reps) => reps.json())
+      .then((list) => {
+        setListItems(list.data.userItems);
+      });
   };
 
-  const handleDelete = (idx) => () => {
-    setListItems([
-      ...listItems.slice(0, idx),
-      ...listItems.slice(idx + 1, listItems.length),
-    ]);
+  useEffect(() => {
+    if (token) {
+      fetch(url.local + "verify", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          if (response.error) {
+            localStorage.removeItem(TOKEN_KEY);
+            history.push("/account");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          localStorage.removeItem(TOKEN_KEY);
+          history.push("/account");
+        });
+    } else {
+      history.push("/account");
+    }
+  }, []);
+
+  useEffect(() => {
+    getListings();
+  }, []);
+
+  const handleAddItem = async () => {
+    if (!todo) return;
+    await fetch(url.local + "createListItem", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        todo: {
+          text: todo,
+          status: true,
+        },
+      }),
+    });
+    setTodo("");
+    getListings();
   };
 
-  const handleEdit = (idx, newText) => {
+  const handleDisabled = (id, currentStatus) => async () => {
+    fetch(url.local + "editListItem", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        edit: {
+          id,
+          newData: {
+            status: !currentStatus,
+          },
+        },
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((edited) => {
+        getListings();
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleDelete = (id, text) => () => {
+    console.log(id, text);
+    fetch(url.local + "deleteListItems", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        itemsArray: [id],
+      }),
+    })
+      .then((res) => {
+        console.log(res);
+        return res.json();
+      })
+      .then((deleted) => {
+        console.log(deleted);
+        getListings();
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleEdit = (id) => (newText) => {
     if (!newText) {
       setErrorState("List item cannot be empty");
       setTimeout(() => {
@@ -56,39 +137,58 @@ export const Todo = () => {
       }, 3000);
       return;
     }
-    setListItems([
-      ...listItems.slice(0, idx),
-      { ...listItems[idx], value: newText, enabled: listItems[idx].enabled },
-      ...listItems.slice(idx + 1, listItems.length),
-    ]);
+    fetch(url.local + "editListItem", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        edit: {
+          id,
+          newData: {
+            text: newText,
+          },
+        },
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((edited) => {
+        getListings();
+      })
+      .catch((err) => console.log(err));
   };
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(listItems));
-  });
+  const handleLogout = () => {
+    localStorage.removeItem(TOKEN_KEY);
+    history.push("/account");
+  };
 
   return (
     <div className="todo">
+      <button className="logoutBtn" onClick={handleLogout}>
+        Logout
+      </button>
       <div className="contentWrapper">
         <h1 className="title">ToDo List</h1>
         <NewInput value={todo} onChange={setTodo} onAdd={handleAddItem} />
-
         <div className="listWrapper">
           {listItems.map((item, idx) => {
             return (
               <ListItem
                 idx={idx}
                 item={item}
-                key={item.id}
+                key={item._id}
+                id={item._id}
                 className={
-                  listItems[idx].enabled
-                    ? "listItemEnabled"
-                    : "listItemDisabled"
+                  listItems[idx].status ? "listItemEnabled" : "listItemDisabled"
                 }
-                onItemChange={handleEdit}
-                status={listItems[idx].enabled}
-                handleDelete={handleDelete(idx)}
-                handleDisabled={handleDisabled(idx)}
+                onItemChange={handleEdit(item._id)}
+                status={listItems[idx].status}
+                handleDelete={handleDelete(item._id, item.text)}
+                handleDisabled={handleDisabled(item._id, listItems[idx].status)}
                 throwError={errorState}
               />
             );

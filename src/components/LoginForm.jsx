@@ -6,6 +6,7 @@ export const LoginForm = () => {
     handleOnChange,
     handleOnSubmit,
     loading,
+    errorMessage,
   } = useLogin();
 
   return (
@@ -30,6 +31,7 @@ export const LoginForm = () => {
           placeholder="********"
         />
       </label>
+      {errorMessage && <span className="errorSpan">{errorMessage}</span>}
       <input name="submit" type="submit" value={"LOG IN"} />
       {loading ? <h3>Loading . . .</h3> : null}
     </form>
